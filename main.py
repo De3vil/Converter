@@ -1,7 +1,8 @@
 #*__*- UTF-8 -*__*
 	#by: MiDo 
 	#FB.com/mido.de3vil
-
+from win10toast import ToastNotifier
+import time
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QStyleOptionComboBox
 from PyQt5.QtCore import *
@@ -15,10 +16,8 @@ from pdf2docx import parse
 from PyQt5 import QtCore
 from time import sleep
 import webbrowser
-from ui.ui import Ui_MainWindow as DS
+from proj import Ui_MainWindow as DS
 
-
-#FORM_CLASS ,_ = loadUiType(path.join(path.dirname(__file__),"pdf.ui"))
 class Thread(QThread):
 	time = pyqtSignal(str)
 	conv = pyqtSignal(str)
@@ -32,6 +31,14 @@ class Thread_file(QThread):
 	def __init__(self , main):
 		super().__init__()
 		self.main = main
+	def mido(self):
+		toaster = ToastNotifier()
+		toaster.show_toast("Converter",
+		                   "fileconverter finish",
+		                   icon_path=r"E:\Coureses\python_Desktopapp_projects_exe\conv_exe\\ppdf.ico",
+		                   duration=8,
+		                   threaded=True)
+		while toaster.notification_active(): time.sleep(0.1)
 	def run(self):
 		try:
 			done = self.main.label_3
@@ -44,6 +51,7 @@ class Thread_file(QThread):
 		except Exception:
 			pass
 		done.setText('Done')
+		self.mido()
 		QThread.sleep(2)
 		done.clear()
 		done.setStyleSheet('None')
@@ -61,6 +69,8 @@ class FMainApp (QMainWindow ,DS ):
 		self.thread.start()
 		self.buttn()
 		self.doShake()
+
+
 
 
 	def doShake(self):
@@ -102,8 +112,6 @@ class FMainApp (QMainWindow ,DS ):
 ###########################################################################
 ##################################################################
 	def remove_titrl_bar(self):
-		#  االداله دي بتخليني احذف البار اللي هو علامة الاكس والحاجات اللي بتبقي في البرنامج عشان بسبتبدلهم باستيل تاني
-		# داله مهمه جدا هتستخدمها في كل البرامج اللي هتعملها
 		self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
 		self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 	def set_time(self , value):
@@ -119,7 +127,7 @@ class FMainApp (QMainWindow ,DS ):
 	def buttn(self):
 		self.pushButton.clicked.connect(self.browse)
 		self.pushButton_2.clicked.connect(self.convetr)
-		self.pushButton_3.clicked.connect(self.ext)
+		self.pushButton_3.clicked.connect(lambda: self.close())
 		self.pushButton_4.clicked.connect(self.m)
 		self.pushButton_5.clicked.connect(self.fac)
 
@@ -147,6 +155,21 @@ class FMainApp (QMainWindow ,DS ):
 def main():
 	app = QApplication(argv)
 	window = FMainApp()
+	menu = QMenu()
+	v = QSystemTrayIcon(QIcon(r"E:\Coureses\python_Desktopapp_projects_exe\conv_exe\\ppdf.ico"),app)
+	v.setToolTip("Converter")
+	menu = QMenu()
+	action_exit = QAction("Exit")
+	action_exit.triggered.connect(app.exit)
+	menu.addAction(action_exit)
+
+	action_show = QAction("Show Window")
+	action_show.triggered.connect(window.show)
+	menu.addAction(action_show)
+	v.setContextMenu(menu)
+	v.show()
+	app.setQuitOnLastWindowClosed(False)
 	window.show()
 	app.exec_()
+
 main()
