@@ -150,7 +150,7 @@ class FMainApp (QMainWindow ,DS ):
 	def m(self):
 		self.showMinimized()
 	def fac(self):
-		webbrowser.open("https://FB.com/mido.de3vil")
+		webbrowser.open("https://FB.com/De3vil.3")
 
 def main():
 	app = QApplication(argv)
