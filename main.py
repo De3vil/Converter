@@ -35,7 +35,7 @@ class Thread_file(QThread):
 		toaster = ToastNotifier()
 		toaster.show_toast("Converter",
 		                   "fileconverter finish",
-		                   icon_path=r"E:\Coureses\python_Desktopapp_projects_exe\conv_exe\\ppdf.ico",
+		                   icon_path=r"icons\\ppdf.ico",
 		                   duration=8,
 		                   threaded=True)
 		while toaster.notification_active(): time.sleep(0.1)
@@ -144,7 +144,7 @@ class FMainApp (QMainWindow ,DS ):
 	def lodeng(self):
 		self.label_3.setStyleSheet('background-color: rgb(0, 255, 0); border-radius:  10px; color: rgb(255, 0, 255); font: 9pt "MV Boli"; margin-left: 10px; margin-right: 10px;')
 		
-		self.label_3.setText('Lodeng..')
+		self.label_3.setText('loading..')
 
 
 	def m(self):
@@ -156,7 +156,7 @@ def main():
 	app = QApplication(argv)
 	window = FMainApp()
 	menu = QMenu()
-	v = QSystemTrayIcon(QIcon(r"E:\Coureses\python_Desktopapp_projects_exe\conv_exe\\ppdf.ico"),app)
+	v = QSystemTrayIcon(QIcon(r"icons\\ppdf.ico"),app)
 	v.setToolTip("Converter")
 	menu = QMenu()
 	action_exit = QAction("Exit")
